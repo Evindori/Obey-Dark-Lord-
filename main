@@ -5,6 +5,7 @@ import ground
 import os
 from pygame import *
 from ground import*
+from hero import *
 
 height = 500
 width = 700
@@ -51,15 +52,13 @@ def main():
     bg = Surface((width, height))
     background_image = pygame.image.load("background_1.jpg").convert()
     
-    pygame.mixer.init()
-    pygame.mixer.music.load('%s/soundtrack/1.mp3')
-    pygame.mixer.music.play(-1)    
-    
     for i in range(level_amount):
         level = []
         load_level(i + 1, level)
         entities = pygame.sprite.Group()
-        grave = []        
+        grave = [] 
+        playerX = 255
+        playerY = 255
 
         x = 0
         y = 0
@@ -72,13 +71,26 @@ def main():
                 x += gr_width
             y += gr_height
             x = 0
-        
-        pygame.mixer.music.play(loops=-1)
+        hero = Player(playerX,playerY)       
+        entities.add(hero)
         while not done:
-     
+            left = right = up = 0
             for e in pygame.event.get():
-                    if e.type == QUIT: #event handling
-                        done = True
+                if e.type == QUIT: #event handling
+                    done = True
+                if e.type == KEYDOWN and e.key == K_UP:
+                    up = True
+                if e.type == KEYDOWN and e.key == K_LEFT:
+                    left = True
+                if e.type == KEYDOWN and e.key ==   K_RIGHT:
+                    right = True
+                if e.type == KEYUP and e.key == K_UP:
+                    up = False
+                if e.type == KEYUP and e.key == K_RIGHT:
+                    right = False
+                if e.type == KEYUP and e.key == K_LEFT:
+                    left = False    
+            hero.update(left, right, up, entities)      
             screen.blit(background_image, (0,0))
             entities.draw(screen)
             pygame.display.update()
@@ -88,4 +100,3 @@ def main():
 if __name__ == "__main__":
     screen_saver()
     main()        
-    
