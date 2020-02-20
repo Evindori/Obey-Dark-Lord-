@@ -1,0 +1,11 @@
+from pygame import*
+
+h_speed = 10
+h_width = 40
+h_height = 40
+
+class Player(sprite.Sprite):
+    def __init__(self, x, y):
+        sprite.Sprite.__init__(self)
+        self.begX = x
+        self.begY = y
