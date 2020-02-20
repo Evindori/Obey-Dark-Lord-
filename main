@@ -1,0 +1,63 @@
+@@ -0,0 +1,62 @@
+import pygame
+import hero
+import os
+from pygame import *
+
+height = 500
+width = 700
+level_amount = 1
+
+FILE_DIR = os.path.dirname(__file__)
+
+def load_level(n):
+    c_level = '%s/levels/' + str(n) + '.txt'
+    levelfile = open(c_level % FILE_DIR)
+    line = " "
+    tasks = []
+    line = levelfile.readline()
+    while line[0] != "/":
+        line = levelfile.readline()
+        if line[0] == '[':
+            while line[0] != "]":
+                line = levelFile.readline()
+                if line[0] != "]":
+                    ending = line.find("|")
+                    level.append(line[0: ending])
+                    
+def screen_saver():
+    pygame.init()
+    started = False
+    screen = pygame.display.set_mode((width, height))
+    pygame.display.set_caption("Obey Dark Lord")
+    bg = Surface((width, height))        
+    background_image=pygame.image.load("screensaver.jpg").convert()
+    while not started:
+        for e in pygame.event.get():
+            if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
+                started = True
+        screen.blit(background_image, (0,0))
+        pygame.display.update()      
+def main():
+    pygame.init()
+    done = False
+    screen = pygame.display.set_mode((width, height))
+    pygame.display.set_caption("Obey Dark Lord")
+    bg = Surface((width, height))
+    background_image=pygame.image.load("background_1.jpg").convert()
+      
+    for i in range(level_amount):
+        level = []
+        load_level(i + 1)
+        while not done:
+                for e in pygame.event.get():
+                    if e.type == QUIT:
+                        done = True
+                screen.blit(background_image, (0,0))
+                pygame.display.update()
+        pygame.quit()
+
+if __name__ == "__main__":
+    screen_saver()
+    main()        
+    
