@@ -1,0 +1,26 @@
+from pygame import*
+
+h_speed = 10
+h_width = 40
+h_height = 40
+
+stay_a = [('lordoutfit/0.png', 0.1)]
+right_a = [('/r1.png'),
+            ('knight/r2.png'),
+            ('knight/r3.png'),
+            ('knight/r4.png'),
+            ('knight/r5.png')]
+left_a = [('knight/l1.png'),
+            ('knight/l2.png'),
+            ('knight/l3.png'),
+            ('knight/l4.png'),
+            ('knight/l5.png')]
+
+
+class Knight(sprite.Sprite):
+    def __init__(self, x, y):
+        sprite.Sprite.__init__(self)
+        self.begX = x
+        self.begY = y
+        self.xspeed = 0
+        self.yspeed = 0
