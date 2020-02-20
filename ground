@@ -1,0 +1,13 @@
+from pygame import*
+import os
+
+gr_width = 20
+gr_height = 20
+ICON_DIR = os.path.dirname(__file__) 
+
+class Ground(sprite.Sprite):
+    def __init__(self, x, y):
+        sprite.Sprite.__init__(self)
+        self.image = Surface((gr_width, gr_height))
+        self.image = image.load("%s/gr/0.png" % ICON_DIR)
+        self.rect = Rect(x, y, gr_width, gr_height)
