@@ -1,7 +1,7 @@
 from pygame import*
 import pyganim
 
-h_speed = 10
+h_speed = -1
 h_jspeed = 10
 h_width = 60
 h_height = 94
@@ -74,22 +74,14 @@ class Player(sprite.Sprite):
                
                        
         if left:
-            if self.onground:
-                self.xspeed = - h_speed 
-                self.image.fill(Color(COLOR))
-                if up:
-                    self.boltAnimJumpLeft.blit(self.image, (0, 0))
-                else:
-                    self.boltAnimLeft.blit(self.image, (0, 0))
+            self.xspeed = - h_speed 
+            self.image.fill(Color(COLOR))
+            self.boltAnimLeft.blit(self.image, (0, 0))
  
         if right:
-            if self.onground:
-                self.xspeed = h_speed 
-                self.image.fill(Color(COLOR))
-                if up:
-                    self.boltAnimJumpRight.blit(self.image, (0, 0))
-                else:
-                    self.boltAnimRight.blit(self.image, (0, 0))
+            self.xspeed = h_speed 
+            self.image.fill(Color(COLOR))
+            self.boltAnimRight.blit(self.image, (0, 0))
          
         if not(left or right):
             self.xspeed = 0
@@ -100,11 +92,11 @@ class Player(sprite.Sprite):
         if not self.onground:
             self.yspeed +=  gravity
             
-        self.onground = False;  
+        self.onGround = False    
         self.rect.y += self.yspeed
         self.collide(0, self.yspeed, platforms)
-
-        self.rect.x += self.xspeed
+    
+        self.rect.x += self.xspeed 
         self.collide(self.xspeed, 0, platforms)
    
     def collide(self, xspeed, yspeed, ground):
@@ -113,15 +105,15 @@ class Player(sprite.Sprite):
 
                 if xspeed > 0:                    
                     self.rect.right = p.rect.left
+                    self.xspeed = 0         
 
                 if xspeed < 0:                      
                     self.rect.left = p.rect.right 
+                    self.xspeed = 0         
 
                 if yspeed > 0:                     
                     self.rect.bottom = p.rect.top 
-                    self.onground = True
-                    self.yspeed = 0         
+                    self.onground = True      
 
                 if yspeed < 0:                     
-                    self.rect.top = p.rect.bottom
-                    self.yspeed = 0                 
+                    self.rect.top = p.rect.bottom               
