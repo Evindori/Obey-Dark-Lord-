@@ -1,13 +1,13 @@
 from pygame import*
 import pyganim
 
-h_speed = 10
+h_speed = 5
 h_jspeed = 5
 h_width = 60
 h_height = 95
 COLOR =  "#888888"
 h_delay = 0.1
-gravity = 0.3
+gravity = 0.5
 
 stay_a = [('lordoutfit/0.png', 0.1)]
 j_a = [('lordoutfit/j.png', 0.1)]
@@ -103,11 +103,11 @@ class Player(sprite.Sprite):
         for p in platforms:
             if sprite.collide_rect(self, p):
                 if xspeed > 0:
-                    #self.rect.right = p.rect.left
+                    self.rect.right = p.rect.left
                     self.xspeed = 0
 
                 if xspeed < 0:
-                    #self.rect.left = p.rect.right
+                    self.rect.left = p.rect.right
                     self.xspeed = 0
 
                 if yspeed > 0:
