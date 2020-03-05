@@ -7,11 +7,13 @@ from pygame import *
 from ground import*
 from hero import *
 
-height = 500
-width = 700
+height = 600
+width = 900
 level_amount = 1
 
 FILE_DIR = os.path.dirname(__file__)
+
+
 
 def load_level(n, level):
     c_level = '%s/levels/' + str(n) + '.txt'
@@ -45,20 +47,16 @@ def screen_saver():
         pygame.display.update()      
 
 def main():
-    pygame.init()
     done = False
-    screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption("Obey Dark Lord")
-    bg = Surface((width, height))
-    background_image = pygame.image.load("background_1.jpg").convert()
+    background_image = pygame.image.load("background_1.png").convert()
     
     for i in range(level_amount):
         level = []
         load_level(i + 1, level)
         entities = pygame.sprite.Group()
         grave = [] 
-        playerX = 255
-        playerY = 255
+        playerX = 200
+        playerY = 200
 
         x = 0
         y = 0
@@ -77,7 +75,7 @@ def main():
         timer = pygame.time.Clock()
         left = right = up = 0
         while not done:
-            timer.tick(60)
+            timer.tick(11)
             for e in pygame.event.get():
                 if e.type == QUIT: #event handling
                     done = True
@@ -85,7 +83,7 @@ def main():
                     up = True
                 if e.type == KEYDOWN and e.key == K_LEFT:
                     left = True
-                if e.type == KEYDOWN and e.key ==   K_RIGHT:
+                if e.type == KEYDOWN and e.key == K_RIGHT:
                     right = True
                 if e.type == KEYUP and e.key == K_UP:
                     up = False
@@ -93,13 +91,18 @@ def main():
                     right = False
                 if e.type == KEYUP and e.key == K_LEFT:
                     left = False    
-            hero.update(left, right, up, entities)      
-            screen.blit(background_image, (0,0))
+              
+            screen.blit(background_image, (0,0))            
+            hero.update(left, right, up, grave)
             entities.draw(screen)
             pygame.display.update()
 
         pygame.quit()
 
 if __name__ == "__main__":
+    pygame.init()
+    screen = pygame.display.set_mode((width, height))
+    pygame.display.set_caption("Obey Dark Lord")
+    bg = Surface((width, height))    
     screen_saver()
     main()        
