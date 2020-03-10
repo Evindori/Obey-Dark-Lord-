@@ -1,8 +1,12 @@
 from pygame import*
+import pyganim
 
-h_speed = 10
+h_speed = 5
 h_width = 40
 h_height = 40
+h_delay = 0.1
+COLOR =  "#888888"
+gravity = 1.5
 
 stay_a = [('knight/0.png', 0.1)]
 right_a = [('knight/r1.png'),
@@ -45,36 +49,25 @@ class Knight(sprite.Sprite):
             boltAnim.append((anim, h_delay))
         self.boltAnimLeft = pyganim.PygAnimation(boltAnim)
         self.boltAnimLeft.play()
-        
-        self.boltAnimJumpRight= pyganim.PygAnimation(jright_a)
-        self.boltAnimJumpRight.play()
-        
-        self.boltAnimJumpLeft= pyganim.PygAnimation(jleft_a)
-        self.boltAnimJumpLeft.play()
-        
-        self.boltAnimJump= pyganim.PygAnimation(j_a)
-        self.boltAnimJump.play()
-    
-    def update(self, hero, platforms):            
-        if hero.rect.x < self.rect.x:
-            self.xspeed = - h_speed 
-            self.image.fill(Color(COLOR))
-            self.boltAnimLeft.blit(self.image, (0, 0))
- 
-        elif hero.rect.x > self.rect.x:
-            self.xspeed = h_speed 
-            self.image.fill(Color(COLOR))
-            self.boltAnimRight.blit(self.image, (0, 0))
-         
-        else:
-            self.xspeed = 0
-            if not up:
-                self.image.fill(Color(COLOR))
-                self.boltAnimStay.blit(self.image, (0, 0))
-            
+
+    def update(self, hero, platforms):      
         if not self.onground:
             self.yspeed +=  gravity
-            
+        else:
+            if hero.rect.x < self.rect.x:
+                self.xspeed = - h_speed 
+                self.image.fill(Color(COLOR))
+                self.boltAnimLeft.blit(self.image, (0, 0))
+     
+            elif hero.rect.x > self.rect.x:
+                self.xspeed = h_speed 
+                self.image.fill(Color(COLOR))
+                self.boltAnimRight.blit(self.image, (0, 0))
+             
+            else:
+                self.xspeed = 0
+                self.image.fill(Color(COLOR))
+                self.boltAnimStay.blit(self.image, (0, 0))
         self.onground = False
         self.rect.y += self.yspeed
         self.collide(0, self.yspeed, platforms)
