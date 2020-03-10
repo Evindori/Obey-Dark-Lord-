@@ -1,12 +1,14 @@
 import pygame
 import hero
 import morph
+import knight
 import ground
 import os
 from pygame import *
 from ground import*
 from hero import *
 from morph import*
+from knight import*
 
 height = 600
 width = 900
@@ -59,12 +61,15 @@ def main():
         entities = pygame.sprite.Group()
         grave = [] 
         morphs = pygame.sprite.Group()
+        enemies = pygame.sprite.Group()
         playerX = 200
         playerY = 200
         m1_x = 100
         m1_y = 100
         m_x = 50
         m_y = 50
+        k1_x = 400
+        k1_y = 100
 
         x = 0
         y = 0
@@ -86,6 +91,10 @@ def main():
         
         morphs.add(mor1)
         morphs.add(mor)
+       
+        k1 = Knight(k1_x, k1_y)
+        entities.add(k1)
+        enemies.add(k1)
         
         timer = pygame.time.Clock()
         left = right = up = 0
@@ -128,6 +137,8 @@ def main():
             screen.blit(background_image, (0,0))
             for morph in morphs:
                 morph.update(morph_left, morph_right, morph_up, food, grave)
+            for enemy in enemies:
+                enemy.update(hero, grave)
             hero.update(left, right, up, grave)
             entities.draw(screen)
             pygame.display.update()
