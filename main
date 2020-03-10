@@ -1,11 +1,12 @@
 import pygame
 import hero
-
+import morph
 import ground
 import os
 from pygame import *
 from ground import*
 from hero import *
+from morph import*
 
 height = 600
 width = 900
@@ -54,11 +55,16 @@ def main():
         level = []
         load_level(i + 1, level)
         pygame.mixer.music.load(str(i) + '.mp3')
-        pygame.mixer.music.play()        
+        pygame.mixer.music.play(-1)    
         entities = pygame.sprite.Group()
         grave = [] 
+        morphs = pygame.sprite.Group()
         playerX = 200
         playerY = 200
+        m1_x = 100
+        m1_y = 100
+        m_x = 50
+        m_y = 50
 
         x = 0
         y = 0
@@ -73,15 +79,24 @@ def main():
             x = 0
         hero = Player(playerX,playerY)       
         entities.add(hero)
+        mor1 = Morph(m1_x, m1_y)
+        mor = Morph(m_x, m_y)
+        entities.add(mor1)
+        entities.add(mor)
+        
+        morphs.add(mor1)
+        morphs.add(mor)
         
         timer = pygame.time.Clock()
         left = right = up = 0
+        morph_left = morph_right = morph_up = food = 0
         while not done:
             timer.tick(30)
             for e in pygame.event.get():
                 if e.type == QUIT: #event handling
                     done = True
-                if e.type == KEYDOWN and e.key == K_UP:
+                    
+                if e.type == KEYDOWN and e.key == K_UP:#lord behavior
                     up = True
                 if e.type == KEYDOWN and e.key == K_LEFT:
                     left = True
@@ -93,8 +108,22 @@ def main():
                     right = False
                 if e.type == KEYUP and e.key == K_LEFT:
                     left = False    
-              
-            screen.blit(background_image, (0,0))            
+
+                if e.type == KEYDOWN and e.key == K_w:#morphs behavior
+                    morph_up = True
+                if e.type == KEYDOWN and e.key == K_a:
+                    morph_left = True
+                if e.type == KEYDOWN and e.key == K_d:
+                    morph_right = True
+                if e.type == KEYUP and e.key == K_w:
+                    morph_up = False
+                if e.type == KEYUP and e.key == K_d:
+                    morph_right = False
+                if e.type == KEYUP and e.key == K_a:
+                    morph_left = False                     
+            screen.blit(background_image, (0,0))
+            for morph in morphs:
+                morph.update(morph_left, morph_right, morph_up, food, grave)
             hero.update(left, right, up, grave)
             entities.draw(screen)
             pygame.display.update()
