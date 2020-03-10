@@ -1,0 +1,121 @@
+from pygame import*
+import pyganim
+
+h_speed = 10
+h_jspeed = 5
+h_width = 60
+h_height = 95
+COLOR =  "#888888"
+h_delay = 0.1
+gravity = 0.5
+
+stay_a = [('morphoutfit/0.png', 0.1)]
+j_a = [('morphoutfit/j.png', 0.1)]
+right_a = [('morphoutfit/r1.png'),
+            ('morphoutfit/r2.png'),
+            ('morphoutfit/r3.png'),
+            ('morphoutfit/r4.png'),
+            ('morphoutfit/r5.png')]
+left_a = [('morphoutfit/l1.png'),
+            ('morphoutfit/l2.png'),
+            ('morphoutfit/l3.png'),
+            ('morphoutfit/l4.png'),
+            ('morphoutfit/l5.png')]
+jleft_a = [('morphoutfit/jl.png', 0.1)]
+jright_a = [('morphoutfit/jr.png', 0.1)]
+
+
+class Morph(sprite.Sprite):
+    def __init__(self, x, y):
+        sprite.Sprite.__init__(self)
+        self.begX = x
+        self.begY = y
+        self.xspeed = 0
+        self.yspeed = 0
+        self.onground = False
+        self.image = Surface((h_width,h_height))
+        self.image.fill(Color(COLOR))
+        self.rect = Rect(x, y, h_width, h_height)
+
+
+        self.boltAnimStay = pyganim.PygAnimation(stay_a)
+        self.boltAnimStay.play()
+        self.boltAnimStay.blit(self.image, (0, 0))
+        
+        boltAnim = []
+        for anim in right_a:
+            boltAnim.append((anim, h_delay))
+        self.boltAnimRight = pyganim.PygAnimation(boltAnim)
+        self.boltAnimRight.play()
+    
+        boltAnim = []
+        for anim in left_a:
+            boltAnim.append((anim, h_delay))
+        self.boltAnimLeft = pyganim.PygAnimation(boltAnim)
+        self.boltAnimLeft.play()
+        
+        self.boltAnimJumpRight= pyganim.PygAnimation(jright_a)
+        self.boltAnimJumpRight.play()
+        
+        self.boltAnimJumpLeft= pyganim.PygAnimation(jleft_a)
+        self.boltAnimJumpLeft.play()
+        
+        self.boltAnimJump= pyganim.PygAnimation(j_a)
+        self.boltAnimJump.play()
+        
+
+    def update(self, left, right, up, eat, platforms):
+        
+        if up:
+            if self.onground:
+                self.yspeed = - h_jspeed
+            self.image.fill(Color(COLOR))
+            self.boltAnimJump.blit(self.image, (0, 0))
+               
+                       
+        if left:
+            self.xspeed = - h_speed 
+            self.image.fill(Color(COLOR))
+            self.boltAnimLeft.blit(self.image, (0, 0))
+ 
+        if right:
+            self.xspeed = h_speed 
+            self.image.fill(Color(COLOR))
+            self.boltAnimRight.blit(self.image, (0, 0))
+         
+        if not(left or right):
+            self.xspeed = 0
+            if not up:
+                self.image.fill(Color(COLOR))
+                self.boltAnimStay.blit(self.image, (0, 0))
+            
+        if not self.onground:
+            self.yspeed +=  gravity
+            
+        self.onground = False
+        self.rect.y += self.yspeed
+        self.collide(0, self.yspeed, platforms)
+        
+        self.rect.x += self.xspeed 
+        self.collide(self.xspeed, 0, platforms)
+        
+    def collide(self, xspeed, yspeed, platforms):
+        for p in platforms:
+            if sprite.collide_rect(self, p):
+                if xspeed > 0:
+                    self.rect.right = p.rect.left
+                    self.xspeed = 0
+
+                if xspeed < 0:
+                    self.rect.left = p.rect.right
+                    self.xspeed = 0
+
+                if yspeed > 0:
+                    self.rect.bottom = p.rect.top
+                    self.onground = True
+                    self.yspeed = 0
+
+                if yspeed < 0:
+                    self.rect.top = p.rect.bottom
+                    self.yspeed = 0
+   
