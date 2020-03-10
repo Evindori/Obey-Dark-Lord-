@@ -120,7 +120,11 @@ def main():
                 if e.type == KEYUP and e.key == K_d:
                     morph_right = False
                 if e.type == KEYUP and e.key == K_a:
-                    morph_left = False                     
+                    morph_left = False     
+                if e.type == KEYDOWN and e.key == K_e:
+                    food = True
+                if e.type == KEYUP and e.key == K_e:
+                    food = False                       
             screen.blit(background_image, (0,0))
             for morph in morphs:
                 morph.update(morph_left, morph_right, morph_up, food, grave)
