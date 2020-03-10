@@ -64,7 +64,7 @@ class Morph(sprite.Sprite):
         self.boltAnimJump.play()
         
 
-    def update(self, left, right, up, eat, platforms):
+    def update(self, left, right, up, food, platforms):
         
         if up:
             if self.onground:
@@ -94,28 +94,31 @@ class Morph(sprite.Sprite):
             
         self.onground = False
         self.rect.y += self.yspeed
-        self.collide(0, self.yspeed, platforms)
+        self.collide(0, self.yspeed, food, platforms)
         
         self.rect.x += self.xspeed 
-        self.collide(self.xspeed, 0, platforms)
+        self.collide(self.xspeed, 0, food, platforms)
         
-    def collide(self, xspeed, yspeed, platforms):
+    def collide(self, xspeed, yspeed, food, platforms):
         for p in platforms:
             if sprite.collide_rect(self, p):
-                if xspeed > 0:
-                    self.rect.right = p.rect.left
-                    self.xspeed = 0
-
-                if xspeed < 0:
-                    self.rect.left = p.rect.right
-                    self.xspeed = 0
-
-                if yspeed > 0:
-                    self.rect.bottom = p.rect.top
-                    self.onground = True
-                    self.yspeed = 0
-
-                if yspeed < 0:
-                    self.rect.top = p.rect.bottom
-                    self.yspeed = 0
+                if food:
+                    p.die()
+                else:
+                    if xspeed > 0:
+                        self.rect.right = p.rect.left
+                        self.xspeed = 0
+    
+                    if xspeed < 0:
+                        self.rect.left = p.rect.right
+                        self.xspeed = 0
+    
+                    if yspeed > 0:
+                        self.rect.bottom = p.rect.top
+                        self.onground = True
+                        self.yspeed = 0
+    
+                    if yspeed < 0:
+                        self.rect.top = p.rect.bottom
+                        self.yspeed = 0
    
