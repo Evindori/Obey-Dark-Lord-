@@ -1,11 +1,11 @@
 from pygame import*
 import pyganim
 
-h_speed = 10
+h_speed = 7
 h_jspeed = 5
-h_width = 60
-h_height = 95
-COLOR =  "#888888"
+h_width = 40
+h_height = 60
+COLOR =  "#000000"
 h_delay = 0.1
 gravity = 0.5
 
@@ -36,6 +36,8 @@ class Morph(sprite.Sprite):
         self.image = Surface((h_width,h_height))
         self.image.fill(Color(COLOR))
         self.rect = Rect(x, y, h_width, h_height)
+        self.image.set_colorkey(Color(COLOR))
+        
 
 
         self.boltAnimStay = pyganim.PygAnimation(stay_a)
