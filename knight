@@ -2,8 +2,8 @@ from pygame import*
 import pyganim
 
 h_speed = 3
-h_width = 130
-h_height = 90
+h_width = 122
+h_height = 95
 h_delay = 0.1
 COLOR =  "#000000"
 gravity = 1.5
@@ -11,10 +11,12 @@ gravity = 1.5
 stay_a = [('knight/0.png', 0.1)]
 right_a = [('knight/r1.png'),
             ('knight/r2.png'),
-            ('knight/r3.png')]
+            ('knight/r3.png'),
+            ('knight/r4.png')]
 left_a = [('knight/l1.png'),
             ('knight/l2.png'),
-            ('knight/l3.png')]
+            ('knight/l3.png'),
+            ('knight/l4.png')]
 
 
 class Knight(sprite.Sprite):
@@ -95,4 +97,3 @@ class Knight(sprite.Sprite):
                 if yspeed < 0:
                     self.rect.top = p.rect.bottom
                     self.yspeed = 0
-   
