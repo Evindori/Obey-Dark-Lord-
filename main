@@ -45,6 +45,8 @@ def load_level(n, level, morphs,entities,enemies, playerX, playerY):
                 entities.add(k)
                 enemies.add(k)
     
+#ef hero_death():
+   #death_image()
 def screen_saver():
     pygame.init()
     started = False
@@ -130,10 +132,10 @@ def main():
             screen.blit(background_image, (0,0))
             for morph in morphs:
                 time.delay(3)
-                morph.update(morph_left, morph_right, morph_up, food, grave)
+                morph.update(morph_left, morph_right, morph_up, food, grave, enemies)
             for enemy in enemies:
                 enemy.update(hero, grave)
-            hero.update(left, right, up, grave)
+            hero.update(left, right, up, grave, enemies)
             entities.draw(screen)
             pygame.display.update()
 
