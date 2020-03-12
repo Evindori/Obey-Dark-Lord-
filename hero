@@ -3,7 +3,7 @@ import pyganim
 
 h_speed = 3
 h_jspeed = 6
-h_width = 54
+h_width = 60
 h_height = 90
 COLOR =  "#000000"
 h_delay = 0.1
@@ -33,6 +33,7 @@ class Player(sprite.Sprite):
         self.xspeed = 0
         self.yspeed = 0
         self.onground = False
+        self.alive = True
         self.image = Surface((h_width,h_height))
         self.image.fill(Color(COLOR))
         self.rect = Rect(x, y, h_width, h_height)
@@ -65,7 +66,7 @@ class Player(sprite.Sprite):
         self.boltAnimJump.play()
         
 
-    def update(self, left, right, up, platforms):
+    def update(self, left, right, up, platforms, enemies):
         
         if up:
             if self.onground:
@@ -100,6 +101,17 @@ class Player(sprite.Sprite):
         self.rect.x += self.xspeed 
         self.collide(self.xspeed, 0, platforms)
         
+        self.ifalive(enemies)
+    def ifalive(self, enemies):
+        for e in enemies:
+            if sprite.collide_rect(self, e):
+                self.alive = False 
+    def restart(self):
+        self.xspeed = self.yspeed = 0
+        self.rect.x = self.begX
+        self.rect.y = self.begY
+        self.alive = True
+        self.onground = False    
     def collide(self, xspeed, yspeed, platforms):
         for p in platforms:
             if sprite.collide_rect(self, p):
