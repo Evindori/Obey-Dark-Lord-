@@ -18,13 +18,11 @@ FILE_DIR = os.path.dirname(__file__)
 
 
 
-def load_level(n, level):
+def load_level(n, level, morphs,entities,enemies, playerX, playerY):
     c_level = '%s/levels/' + str(n) + '.txt'
-    
     levelfile = open(c_level % FILE_DIR)
     line = " "
     tasks = []
-    line = levelfile.readline()
     while line[0] != "/":
         line = levelfile.readline()
         if line[0] == '[':
@@ -33,6 +31,19 @@ def load_level(n, level):
                 ending = line.find("|")
                 level.append(line[0: ending])
                 line = levelfile.readline()
+        if line[0] != '':
+            charecters = line.split()
+            if charecters[0] == 'player':
+                playerX = int(charecters[1])
+                playerY = int(charecters[2])
+            if charecters[0] == 'morph':
+                m = Morph(int(charecters[1]), int(charecters[2]))
+                entities.add(m)
+                morphs.add(m)
+            if charecters[0] == 'knight':
+                k = Knight(int(charecters[1]), int(charecters[2]))
+                entities.add(k)
+                enemies.add(k)
     
 def screen_saver():
     pygame.init()
@@ -55,46 +66,28 @@ def main():
     
     for i in range(level_amount):
         level = []
-        load_level(i + 1, level)
         pygame.mixer.music.load(str(i) + '.mp3')
         pygame.mixer.music.play(-1)    
         entities = pygame.sprite.Group()
         grave = [] 
         morphs = pygame.sprite.Group()
         enemies = pygame.sprite.Group()
-        playerX = 200
-        playerY = 200
-        m1_x = 100
-        m1_y = 100
-        m_x = 50
-        m_y = 50
-        k1_x = 400
-        k1_y = 100
-
+        playerX = playerY = 100
+        load_level(i + 1, level, morphs,entities, enemies, playerX, playerY)
+        hero = Player(playerX,playerY)       
+        entities.add(hero)
         x = 0
         y = 0
         for row in level:
             for col in row:
                 if col == "-":
-                    pf = Ground(x,y)
+                    pf = Ground(x, y)
                     entities.add(pf)
-                    grave.append(pf)
+                    grave.append(pf)  
                 x += gr_width
             y += gr_height
             x = 0
-        hero = Player(playerX,playerY)       
-        entities.add(hero)
-        mor1 = Morph(m1_x, m1_y)
-        mor = Morph(m_x, m_y)
-        entities.add(mor1)
-        entities.add(mor)
-        
-        morphs.add(mor1)
-        morphs.add(mor)
-       
-        k1 = Knight(k1_x, k1_y)
-        entities.add(k1)
-        enemies.add(k1)
+
         
         timer = pygame.time.Clock()
         left = right = up = 0
@@ -136,6 +129,7 @@ def main():
                     food = False                       
             screen.blit(background_image, (0,0))
             for morph in morphs:
+                time.delay(3)
                 morph.update(morph_left, morph_right, morph_up, food, grave)
             for enemy in enemies:
                 enemy.update(hero, grave)
