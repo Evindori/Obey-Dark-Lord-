@@ -96,48 +96,57 @@ def main():
         morph_left = morph_right = morph_up = food = 0
         while not done:
             timer.tick(30)
-            for e in pygame.event.get():
-                if e.type == QUIT: #event handling
-                    done = True
-                    
-                if e.type == KEYDOWN and e.key == K_UP:#lord behavior
-                    up = True
-                if e.type == KEYDOWN and e.key == K_LEFT:
-                    left = True
-                if e.type == KEYDOWN and e.key == K_RIGHT:
-                    right = True
-                if e.type == KEYUP and e.key == K_UP:
-                    up = False
-                if e.type == KEYUP and e.key == K_RIGHT:
-                    right = False
-                if e.type == KEYUP and e.key == K_LEFT:
-                    left = False    
-
-                if e.type == KEYDOWN and e.key == K_w:#morphs behavior
-                    morph_up = True
-                if e.type == KEYDOWN and e.key == K_a:
-                    morph_left = True
-                if e.type == KEYDOWN and e.key == K_d:
-                    morph_right = True
-                if e.type == KEYUP and e.key == K_w:
-                    morph_up = False
-                if e.type == KEYUP and e.key == K_d:
-                    morph_right = False
-                if e.type == KEYUP and e.key == K_a:
-                    morph_left = False     
-                if e.type == KEYDOWN and e.key == K_e:
-                    food = True
-                if e.type == KEYUP and e.key == K_e:
-                    food = False                       
-            screen.blit(background_image, (0,0))
-            for morph in morphs:
-                time.delay(3)
-                morph.update(morph_left, morph_right, morph_up, food, grave, enemies)
-            for enemy in enemies:
-                enemy.update(hero, grave)
-            hero.update(left, right, up, grave, enemies)
-            entities.draw(screen)
-            pygame.display.update()
+            if hero.alive:
+                for e in pygame.event.get():
+                    if e.type == QUIT: #event handling
+                        done = True
+                        
+                    if e.type == KEYDOWN and e.key == K_UP:#lord behavior
+                        up = True
+                    if e.type == KEYDOWN and e.key == K_LEFT:
+                        left = True
+                    if e.type == KEYDOWN and e.key == K_RIGHT:
+                        right = True
+                    if e.type == KEYUP and e.key == K_UP:
+                        up = False
+                    if e.type == KEYUP and e.key == K_RIGHT:
+                        right = False
+                    if e.type == KEYUP and e.key == K_LEFT:
+                        left = False    
+    
+                    if e.type == KEYDOWN and e.key == K_w:#morphs behavior
+                        morph_up = True
+                    if e.type == KEYDOWN and e.key == K_a:
+                        morph_left = True
+                    if e.type == KEYDOWN and e.key == K_d:
+                        morph_right = True
+                    if e.type == KEYUP and e.key == K_w:
+                        morph_up = False
+                    if e.type == KEYUP and e.key == K_d:
+                        morph_right = False
+                    if e.type == KEYUP and e.key == K_a:
+                        morph_left = False     
+                    if e.type == KEYDOWN and e.key == K_e:
+                        food = True
+                    if e.type == KEYUP and e.key == K_e:
+                        food = False                       
+                screen.blit(background_image, (0,0))
+                for morph in morphs:
+                    time.delay(3)
+                    morph.update(morph_left, morph_right, morph_up, food, grave, enemies)
+                for enemy in enemies:
+                    enemy.update(hero, grave)
+                hero.update(left, right, up, grave, enemies)
+                entities.draw(screen)
+                pygame.display.update()
+            else:
+                hero.restart()
+                for g in grave:
+                    g.restart()
+                for e in enemies:
+                    e.restart()
+                for morph in morphs:
+                    morph.restart()
 
         pygame.quit()
 
