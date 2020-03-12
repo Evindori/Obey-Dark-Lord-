@@ -1,24 +1,20 @@
 from pygame import*
 import pyganim
 
-h_speed = 5
-h_width = 40
-h_height = 40
+h_speed = 3
+h_width = 130
+h_height = 90
 h_delay = 0.1
-COLOR =  "#888888"
+COLOR =  "#000000"
 gravity = 1.5
 
 stay_a = [('knight/0.png', 0.1)]
 right_a = [('knight/r1.png'),
             ('knight/r2.png'),
-            ('knight/r3.png'),
-            ('knight/r4.png'),
-            ('knight/r5.png')]
+            ('knight/r3.png')]
 left_a = [('knight/l1.png'),
             ('knight/l2.png'),
-            ('knight/l3.png'),
-            ('knight/l4.png'),
-            ('knight/l5.png')]
+            ('knight/l3.png')]
 
 
 class Knight(sprite.Sprite):
@@ -32,11 +28,7 @@ class Knight(sprite.Sprite):
         self.image = Surface((h_width,h_height))
         self.image.fill(Color(COLOR))
         self.rect = Rect(x, y, h_width, h_height)
-
-
-        self.boltAnimStay = pyganim.PygAnimation(stay_a)
-        self.boltAnimStay.play()
-        self.boltAnimStay.blit(self.image, (0, 0))
+        self.image.set_colorkey(Color(COLOR))
         
         boltAnim = []
         for anim in right_a:
@@ -49,17 +41,21 @@ class Knight(sprite.Sprite):
             boltAnim.append((anim, h_delay))
         self.boltAnimLeft = pyganim.PygAnimation(boltAnim)
         self.boltAnimLeft.play()
+        
+        self.boltAnimStay = pyganim.PygAnimation(stay_a)
+        self.boltAnimStay.play()
+        self.boltAnimStay.blit(self.image, (0, 0))        
 
     def update(self, hero, platforms):      
         if not self.onground:
             self.yspeed +=  gravity
         else:
-            if hero.rect.x < self.rect.x:
+            if hero.rect.x < self.rect.x - h_speed:
                 self.xspeed = - h_speed 
                 self.image.fill(Color(COLOR))
                 self.boltAnimLeft.blit(self.image, (0, 0))
      
-            elif hero.rect.x > self.rect.x:
+            elif hero.rect.x > self.rect.x + h_speed:
                 self.xspeed = h_speed 
                 self.image.fill(Color(COLOR))
                 self.boltAnimRight.blit(self.image, (0, 0))
@@ -74,7 +70,12 @@ class Knight(sprite.Sprite):
         
         self.rect.x += self.xspeed 
         self.collide(self.xspeed, 0, platforms)
-        
+    def restart(self):
+        self.xspeed = self.yspeed = 0
+        self.rect.x = self.begX
+        self.rect.y = self.begY
+        self.alive = True
+        self.onground = False    
     def collide(self, xspeed, yspeed, platforms):
         for p in platforms:
             if sprite.collide_rect(self, p):
