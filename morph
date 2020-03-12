@@ -2,14 +2,16 @@ from pygame import*
 import pyganim
 
 h_speed = 7
-h_jspeed = 5
+h_jspeed = 6
 h_width = 40
 h_height = 60
 COLOR =  "#000000"
 h_delay = 0.1
 gravity = 0.5
 
-stay_a = [('morphoutfit/0.png', 0.1)]
+stay_f_a = [('morphoutfit/0.png'), 0.1]
+stay_a = [('morphoutfit/0.png'),
+          ('morphoutfit/1.png')]
 j_a = [('morphoutfit/j.png', 0.1)]
 right_a = [('morphoutfit/r1.png'),
             ('morphoutfit/r2.png'),
@@ -23,6 +25,14 @@ left_a = [('morphoutfit/l1.png'),
             ('morphoutfit/l5.png')]
 jleft_a = [('morphoutfit/jl.png', 0.1)]
 jright_a = [('morphoutfit/jr.png', 0.1)]
+
+left_eat_a = [('morphoutfit/le1.png'),
+            ('morphoutfit/le2.png'),
+            ('morphoutfit/le3.png')]
+
+right_eat_a = [('morphoutfit/re1.png'),
+            ('morphoutfit/re2.png'),
+            ('morphoutfit/re3.png')]
 
 
 class Morph(sprite.Sprite):
@@ -39,10 +49,11 @@ class Morph(sprite.Sprite):
         self.image.set_colorkey(Color(COLOR))
         
 
-
-        self.boltAnimStay = pyganim.PygAnimation(stay_a)
+        boltAnim = []
+        for anim in stay_a:
+            boltAnim.append((anim, h_delay*1.5))
+        self.boltAnimStay = pyganim.PygAnimation(boltAnim)
         self.boltAnimStay.play()
-        self.boltAnimStay.blit(self.image, (0, 0))
         
         boltAnim = []
         for anim in right_a:
@@ -56,15 +67,27 @@ class Morph(sprite.Sprite):
         self.boltAnimLeft = pyganim.PygAnimation(boltAnim)
         self.boltAnimLeft.play()
         
-        self.boltAnimJumpRight= pyganim.PygAnimation(jright_a)
+        boltAnim = []
+        for anim in left_eat_a:
+            boltAnim.append((anim, h_delay))
+        self.boltAnimLeftEat = pyganim.PygAnimation(boltAnim)
+        self.boltAnimLeftEat.play()  
+        
+        boltAnim = []
+        for anim in right_eat_a:
+            boltAnim.append((anim, h_delay))
+        self.boltAnimRightEat = pyganim.PygAnimation(boltAnim)
+        self.boltAnimRightEat.play()        
+        
+        self.boltAnimJumpRight = pyganim.PygAnimation(jright_a)
         self.boltAnimJumpRight.play()
         
-        self.boltAnimJumpLeft= pyganim.PygAnimation(jleft_a)
+        self.boltAnimJumpLeft = pyganim.PygAnimation(jleft_a)
         self.boltAnimJumpLeft.play()
         
-        self.boltAnimJump= pyganim.PygAnimation(j_a)
+        self.boltAnimJump = pyganim.PygAnimation(j_a)
         self.boltAnimJump.play()
-        
+             
 
     def update(self, left, right, up, food, platforms):
         
@@ -78,12 +101,18 @@ class Morph(sprite.Sprite):
         if left:
             self.xspeed = - h_speed 
             self.image.fill(Color(COLOR))
-            self.boltAnimLeft.blit(self.image, (0, 0))
+            if food:
+                self.boltAnimLeftEat.blit(self.image, (0, 0))    
+            else:
+                self.boltAnimLeft.blit(self.image, (0, 0))
  
         if right:
             self.xspeed = h_speed 
             self.image.fill(Color(COLOR))
-            self.boltAnimRight.blit(self.image, (0, 0))
+            if food:
+                self.boltAnimRightEat.blit(self.image, (0, 0))    
+            else:
+                self.boltAnimRight.blit(self.image, (0, 0))
          
         if not(left or right):
             self.xspeed = 0
@@ -123,4 +152,3 @@ class Morph(sprite.Sprite):
                     if yspeed < 0:
                         self.rect.top = p.rect.bottom
                         self.yspeed = 0
-   
