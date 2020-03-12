@@ -137,8 +137,8 @@ class Morph(sprite.Sprite):
             self.ifalive(enemies)
         else:
             if not self.onground:
-                print(1)
-                self.rect.y += gravity
+                self.yspeed += gravity
+                self.rect.y += self.yspeed
                 self.collide(0, self.yspeed, food, platforms)
             self.image.fill(Color(COLOR))
             self.boltAnimDeath.blit(self.image, (0, 0))            
@@ -146,7 +146,12 @@ class Morph(sprite.Sprite):
         for e in enemies:
             if sprite.collide_rect(self, e):
                 self.alive = False
-        
+    def restart(self):
+        self.xspeed = self.yspeed = 0
+        self.rect.x = self.begX
+        self.rect.y = self.begY
+        self.alive = True
+        self.onground = False
     def collide(self, xspeed, yspeed, food, platforms):
         for p in platforms:
             if sprite.collide_rect(self, p):
@@ -169,3 +174,4 @@ class Morph(sprite.Sprite):
                     if yspeed < 0:
                         self.rect.top = p.rect.bottom
                         self.yspeed = 0
+   
