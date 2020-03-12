@@ -34,6 +34,7 @@ class Player(sprite.Sprite):
         self.yspeed = 0
         self.onground = False
         self.alive = True
+        self.levelcompleted = False
         self.image = Surface((h_width,h_height))
         self.image.fill(Color(COLOR))
         self.rect = Rect(x, y, h_width, h_height)
@@ -66,7 +67,7 @@ class Player(sprite.Sprite):
         self.boltAnimJump.play()
         
 
-    def update(self, left, right, up, platforms, enemies):
+    def update(self, left, right, up, platforms, enemies, ending):
         
         if up:
             if self.onground:
@@ -102,10 +103,15 @@ class Player(sprite.Sprite):
         self.collide(self.xspeed, 0, platforms)
         
         self.ifalive(enemies)
+        self.won(ending)
     def ifalive(self, enemies):
         for e in enemies:
             if sprite.collide_rect(self, e):
-                self.alive = False 
+                self.alive = False
+    def won(self, ending):
+        for e in ending:
+            if sprite.collide_rect(self, e): 
+                self.levelcompleted = True
     def restart(self):
         self.xspeed = self.yspeed = 0
         self.rect.x = self.begX
@@ -131,8 +137,3 @@ class Player(sprite.Sprite):
                 if yspeed < 0:
                     self.rect.top = p.rect.bottom
                     self.yspeed = 0
-    def die(self):
-        self.xspeed = 0
-        self.yspeed = 0
-        self.rect.x = self.begX
-        self.rect.y = self.begY
