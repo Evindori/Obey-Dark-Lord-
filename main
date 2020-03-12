@@ -12,7 +12,7 @@ from knight import*
 
 height = 600
 width = 900
-level_amount = 1
+level_amount = 2
 
 FILE_DIR = os.path.dirname(__file__)
 
@@ -74,6 +74,7 @@ def main():
         grave = [] 
         morphs = pygame.sprite.Group()
         enemies = pygame.sprite.Group()
+        ending = pygame.sprite.Group()
         playerX = playerY = 100
         load_level(i + 1, level, morphs,entities, enemies, playerX, playerY)
         hero = Player(playerX,playerY)       
@@ -85,7 +86,11 @@ def main():
                 if col == "-":
                     pf = Ground(x, y)
                     entities.add(pf)
-                    grave.append(pf)  
+                    grave.append(pf)
+                if col == "E":
+                    e = LevelEnd(x, y)
+                    entities.add(e)
+                    ending.add(e)
                 x += gr_width
             y += gr_height
             x = 0
@@ -94,7 +99,7 @@ def main():
         timer = pygame.time.Clock()
         left = right = up = 0
         morph_left = morph_right = morph_up = food = 0
-        while not done:
+        while (not hero.levelcompleted) and (not done):
             timer.tick(30)
             if hero.alive:
                 for e in pygame.event.get():
@@ -136,9 +141,12 @@ def main():
                     morph.update(morph_left, morph_right, morph_up, food, grave, enemies)
                 for enemy in enemies:
                     enemy.update(hero, grave)
-                hero.update(left, right, up, grave, enemies)
+                hero.update(left, right, up, grave, enemies, ending)
                 entities.draw(screen)
                 pygame.display.update()
+                
+                if hero.rect.y > height:
+                    hero.alive = False
             else:
                 hero.restart()
                 for g in grave:
@@ -147,8 +155,9 @@ def main():
                     e.restart()
                 for morph in morphs:
                     morph.restart()
-
-        pygame.quit()
+        if done:
+            pygame.quit()
+    pygame.quit()
 
 if __name__ == "__main__":
     pygame.init()
