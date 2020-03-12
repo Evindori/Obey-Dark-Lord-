@@ -2,9 +2,9 @@ from pygame import*
 import pyganim
 
 h_speed = 3
-h_jspeed = 5
-h_width = 60
-h_height = 95
+h_jspeed = 6
+h_width = 54
+h_height = 90
 COLOR =  "#000000"
 h_delay = 0.1
 gravity = 0.5
@@ -100,7 +100,7 @@ class Player(sprite.Sprite):
         self.rect.x += self.xspeed 
         self.collide(self.xspeed, 0, platforms)
         
-    def collide(self, xspeed, yspeed, aplatforms):
+    def collide(self, xspeed, yspeed, platforms):
         for p in platforms:
             if sprite.collide_rect(self, p):
                 if xspeed > 0:
