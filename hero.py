@@ -11,16 +11,16 @@ gravity = 0.5
 
 stay_a = [('lordoutfit/0.png', 0.1)]
 j_a = [('lordoutfit/j.png', 0.1)]
-right_a = [('lordoutfit/r1.png'),
-            ('lordoutfit/r2.png'),
-            ('lordoutfit/r3.png'),
-            ('lordoutfit/r4.png'),
-            ('lordoutfit/r5.png')]
-left_a = [('lordoutfit/l1.png'),
-            ('lordoutfit/l2.png'),
-            ('lordoutfit/l3.png'),
-            ('lordoutfit/l4.png'),
-            ('lordoutfit/l5.png')]
+right_a = ['lordoutfit/r1.png',
+            'lordoutfit/r2.png',
+            'lordoutfit/r3.png',
+            'lordoutfit/r4.png',
+            'lordoutfit/r5.png']
+left_a = ['lordoutfit/l1.png',
+            'lordoutfit/l2.png',
+            'lordoutfit/l3.png',
+            'lordoutfit/l4.png',
+            'lordoutfit/l5.png']
 jleft_a = [('lordoutfit/jl.png', 0.1)]
 jright_a = [('lordoutfit/jr.png', 0.1)]
 
