@@ -66,24 +66,33 @@ def load_level(n, level, morphs,entities,enemies, playerX, playerY):
                 entities.add(k)
                 enemies.add(k)
     
+def death():
+    hero.restart()
+    for g in grave:
+        g.restart()
+    for e in enemies:
+        e.restart()
+    for morph in morphs:
+        morph.restart()
 
-def screen_saver():
+def screen_saver(done):
     pygame.init()
     started = False
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Obey Dark Lord")
     bg = Surface((width, height))     
     
-    background_image=pygame.image.load("screensaver.jpg").convert()
-    while not started:
+    background_image = pygame.image.load("screensaver.jpg").convert()
+    while not started and not done:
         for e in pygame.event.get():
             if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 started = True
+            if e.type == QUIT: #event handling
+                done = True            
             screen.blit(background_image, (0,0))
-        pygame.display.update()      
-
-def main():
-    done = False
+        pygame.display.update()    
+    return done
+def main(done):
     background_image = pygame.image.load("bg.png").convert()
     
     for i in range(level_amount):
@@ -172,22 +181,27 @@ def main():
                 
                 if hero.rect.y > height:
                     hero.alive = False
-            else:
-                hero.restart()
-                for g in grave:
-                    g.restart()
-                for e in enemies:
-                    e.restart()
-                for morph in morphs:
-                    morph.restart()
-        if done:
-            pygame.quit()
+                if not hero.alive:
+                    death()
+            
+    return done
+
+def end(done):
+    background_image = pygame.image.load("end.png").convert()
+    while not done:
+        for e in pygame.event.get():
+            if e.type == QUIT:
+                done = True            
+            screen.blit(background_image, (0,0))
+        pygame.display.update()    
     pygame.quit()
 
 if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Obey Dark Lord")
-    bg = Surface((width, height))    
-    screen_saver()
-    main()        
+    bg = Surface((width, height))
+    done = False
+    done = screen_saver(done)
+    done = main(done)        
+    end(done)
