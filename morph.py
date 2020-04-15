@@ -10,19 +10,19 @@ h_delay = 0.1
 gravity = 0.5
 
 stay_f_a = [('morphoutfit/0.png'), 0.1]
-stay_a = [('morphoutfit/0.png'),
-          ('morphoutfit/1.png')]
+stay_a = ['morphoutfit/0.png',
+          'morphoutfit/1.png']
 j_a = [('morphoutfit/j.png', 0.1)]
-right_a = [('morphoutfit/r1.png'),
-            ('morphoutfit/r2.png'),
-            ('morphoutfit/r3.png'),
-            ('morphoutfit/r4.png'),
-            ('morphoutfit/r5.png')]
-left_a = [('morphoutfit/l1.png'),
-            ('morphoutfit/l2.png'),
-            ('morphoutfit/l3.png'),
-            ('morphoutfit/l4.png'),
-            ('morphoutfit/l5.png')]
+right_a = ['morphoutfit/r1.png',
+            'morphoutfit/r2.png',
+            'morphoutfit/r3.png',
+            'morphoutfit/r4.png',
+            'morphoutfit/r5.png']
+left_a = ['morphoutfit/l1.png',
+            'morphoutfit/l2.png',
+            'morphoutfit/l3.png',
+            'morphoutfit/l4.png',
+            'morphoutfit/l5.png']
 jleft_a = [('morphoutfit/jl.png', 0.1)]
 jright_a = [('morphoutfit/jr.png', 0.1)]
 
