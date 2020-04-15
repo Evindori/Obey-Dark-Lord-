@@ -9,14 +9,14 @@ COLOR =  "#000000"
 gravity = 1.5
 
 stay_a = [('knight/0.png', 0.1)]
-right_a = [('knight/r1.png'),
-            ('knight/r2.png'),
-            ('knight/r3.png'),
-            ('knight/r4.png')]
-left_a = [('knight/l1.png'),
-            ('knight/l2.png'),
-            ('knight/l3.png'),
-            ('knight/l4.png')]
+right_a = ['knight/r1.png',
+            'knight/r2.png',
+            'knight/r3.png',
+            'knight/r4.png']
+left_a = ['knight/l1.png',
+            'knight/l2.png',
+            'knight/l3.png',
+            'knight/l4.png']
 
 
 class Knight(sprite.Sprite):
