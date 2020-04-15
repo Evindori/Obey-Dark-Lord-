@@ -66,14 +66,15 @@ def load_level(n, level, morphs,entities,enemies, playerX, playerY):
                 entities.add(k)
                 enemies.add(k)
     
-def death():
+def death(hero, morphs, grave, enemies):
+    for morph in morphs:
+        morph.restart()    
     hero.restart()
     for g in grave:
         g.restart()
     for e in enemies:
         e.restart()
-    for morph in morphs:
-        morph.restart()
+
 
 def screen_saver(done):
     pygame.init()
@@ -182,7 +183,7 @@ def main(done):
                 if hero.rect.y > height:
                     hero.alive = False
                 if not hero.alive:
-                    death()
+                    death(hero, morphs, grave, enemies)
             
     return done
 
