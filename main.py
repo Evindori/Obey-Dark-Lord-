@@ -1,17 +1,20 @@
 import pygame
+import time
 import hero
 import morph
 import knight
 import ground
 import os
-from ground import *
-from hero import *
-from morph import *
-from knight import *
+from ground import LevelEnd, Ground
+from hero import Player
+from morph import Morph
+from knight import Knight
 
 height = 463
 width = 900
 level_amount = 2
+gr_width = 55
+gr_height = 35
 
 FILE_DIR = os.path.dirname(__file__)
 
@@ -47,7 +50,7 @@ def load_level(n,
                enemies,
                playerX,
                playerY):
-    c_level = '%s/levels/' + str(n) + '.txt'
+    c_level = "%s\levels\level" + str(n) + ".txt"
     levelfile = open(c_level % FILE_DIR)
     line = " "
     tasks = []
@@ -96,7 +99,7 @@ def screen_saver(done):
         for e in pygame.event.get():
             if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 started = True
-            if e.type == QUIT:  # event handling
+            if e.type == pygame.QUIT:  # event handling
                 done = True
             screen.blit(background_image, (0, 0))
         pygame.display.update()
@@ -153,7 +156,7 @@ def main(done):
             timer.tick(30)
             if hero.alive:
                 for e in pygame.event.get():
-                    if e.type == QUIT:  # event handling
+                    if e.type == pygame.QUIT:  # event handling
                         done = True
 
                     if e.type == pygame.KEYDOWN and e.key == pygame.K_UP:
@@ -187,7 +190,6 @@ def main(done):
                         food = False
                 screen.blit(background_image, (0, 0))
                 for morph in morphs:
-                    time.delay(3)
                     morph.update(morph_left,
                                  morph_right,
                                  morph_up,
@@ -219,7 +221,7 @@ def end(done):
     background_image = pygame.image.load("end.png").convert()
     while not done:
         for e in pygame.event.get():
-            if e.type == QUIT:
+            if e.type == pygame.QUIT:
                 done = True
             screen.blit(background_image, (0, 0))
         pygame.display.update()
@@ -230,7 +232,7 @@ if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Obey Dark Lord")
-    bg = Surface((width, height))
+    bg = pygame.Surface((width, height))
     done = False
     done = screen_saver(done)
     done = main(done)
