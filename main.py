@@ -51,7 +51,7 @@ def load_level(n,
                playerX,
                playerY):
     c_level = "%s\levels\level" + str(n) + ".txt"
-    levelfile = open(c_level % FILE_DIR)
+    levelfile = open(c_level)
     line = " "
     tasks = []
     while line[0] != "/":
