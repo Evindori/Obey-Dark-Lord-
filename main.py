@@ -40,7 +40,13 @@ def camera_configure(camera, target_rect):
     return pygame.Rect(l, t, w, h)
 
 
-def load_level(n, level, morphs, entities, enemies, playerX, playerY):
+def load_level(n,
+               level,
+               morphs,
+               entities,
+               enemies,
+               playerX,
+               playerY):
     c_level = '%s/levels/' + str(n) + '.txt'
     levelfile = open(c_level % FILE_DIR)
     line = " "
@@ -110,7 +116,13 @@ def main(done):
         enemies = pygame.sprite.Group()
         ending = pygame.sprite.Group()
         playerX = playerY = 100
-        load_level(i + 1, level, morphs, entities, enemies, playerX, playerY)
+        load_level(i + 1,
+                   level,
+                   morphs,
+                   entities,
+                   enemies,
+                   playerX,
+                   playerY)
         hero = Player(playerX, playerY)
         entities.add(hero)
         x = 0
@@ -134,7 +146,9 @@ def main(done):
         morph_left = morph_right = morph_up = food = 0
         total_level_width = len(level[0]) * gr_width
         total_level_height = len(level) * gr_height
-        camera = Camera(camera_configure, total_level_width, total_level_height)
+        camera = Camera(camera_configure,
+                        total_level_width,
+                        total_level_height)
         while (not hero.levelcompleted) and (not done):
             timer.tick(30)
             if hero.alive:
@@ -142,7 +156,7 @@ def main(done):
                     if e.type == QUIT:  # event handling
                         done = True
 
-                    if e.type == pygame.KEYDOWN and e.key == pygame.K_UP:  # lord behavior
+                    if e.type == pygame.KEYDOWN and e.key == pygame.K_UP:
                         up = True
                     if e.type == pygame.KEYDOWN and e.key == pygame.K_LEFT:
                         left = True
@@ -155,7 +169,7 @@ def main(done):
                     if e.type == pygame.KEYUP and e.key == pygame.K_LEFT:
                         left = False
 
-                    if e.type == pygame.KEYDOWN and e.key == pygame.K_w:  # morphs behavior
+                    if e.type == pygame.KEYDOWN and e.key == pygame.K_w:
                         morph_up = True
                     if e.type == pygame.KEYDOWN and e.key == pygame.K_a:
                         morph_left = True
@@ -174,10 +188,20 @@ def main(done):
                 screen.blit(background_image, (0, 0))
                 for morph in morphs:
                     time.delay(3)
-                    morph.update(morph_left, morph_right, morph_up, food, grave, enemies)
+                    morph.update(morph_left,
+                                 morph_right,
+                                 morph_up,
+                                 food,
+                                 grave,
+                                 enemies)
                 for enemy in enemies:
                     enemy.update(hero, grave)
-                hero.update(left, right, up, grave, enemies, ending)
+                hero.update(left,
+                            right,
+                            up,
+                            grave,
+                            enemies,
+                            ending)
                 camera.update(hero)
                 for e in entities:
                     screen.blit(e.image, camera.apply(e))
