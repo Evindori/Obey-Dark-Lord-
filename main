@@ -42,7 +42,7 @@ def camera_configure(camera, target_rect):
         
 def load_level(n, level, morphs,entities,enemies, playerX, playerY):
     c_level = str(n) + '.txt'
-    level_path = display_path(os.path.join('levels', 'level', c_level))
+    level_path = display_path(os.path.join('levels', c_level))
     print(level_path)
     line = " "
     tasks = []
