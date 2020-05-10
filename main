@@ -10,61 +10,94 @@ from hero import *
 from morph import*
 from knight import*
 
-height = 600
+height = 463
 width = 900
 level_amount = 2
 
-FILE_DIR = os.path.dirname(__file__)
 
+def display_path(path):
+    return path.replace("\\", "/")
 
+class Camera(object):
+    def __init__(self, camera_func, width, height):
+        self.camera_func = camera_func
+        self.state = Rect(0, 0, width, height)
+	
+    def apply(self, target):
+        return target.rect.move(self.state.topleft)
 
+    def update(self, target):
+        self.state = self.camera_func(self.state, target.rect)
+        
+def camera_configure(camera, target_rect):
+    l, t, _, _ = target_rect
+    _, _, w, h = camera
+    l, t = -l+width / 2, -t+ height / 2
+
+    l = min(0, l)
+    l = max(-(camera.width-width), l)
+    t = max(-(camera.height-height), t)
+
+    return Rect(l, t, w, h)   
+        
 def load_level(n, level, morphs,entities,enemies, playerX, playerY):
-    c_level = '%s/levels/' + str(n) + '.txt'
-    levelfile = open(c_level % FILE_DIR)
+    c_level = str(n) + '.txt'
+    level_path = display_path(os.path.join('levels', 'level', c_level))
+    print(level_path)
     line = " "
     tasks = []
-    while line[0] != "/":
-        line = levelfile.readline()
-        if line[0] == '[':
+    with open(level_path) as levelfile:
+        while line[0] != "/":
             line = levelfile.readline()
-            while line[0] != "]":
-                ending = line.find("|")
-                level.append(line[0: ending])
+            if line[0] == '[':
                 line = levelfile.readline()
-        if line[0] != '':
-            charecters = line.split()
-            if charecters[0] == 'player':
-                playerX = int(charecters[1])
-                playerY = int(charecters[2])
-            if charecters[0] == 'morph':
-                m = Morph(int(charecters[1]), int(charecters[2]))
-                entities.add(m)
-                morphs.add(m)
-            if charecters[0] == 'knight':
-                k = Knight(int(charecters[1]), int(charecters[2]))
-                entities.add(k)
-                enemies.add(k)
+                while line[0] != "]":
+                    ending = line.find("|")
+                    level.append(line[0: ending])
+                    line = levelfile.readline()
+            if line[0] != '':
+                charecters = line.split()
+                if charecters[0] == 'player':
+                    playerX = int(charecters[1])
+                    playerY = int(charecters[2])
+                if charecters[0] == 'morph':
+                    m = Morph(int(charecters[1]), int(charecters[2]))
+                    entities.add(m)
+                    morphs.add(m)
+                if charecters[0] == 'knight':
+                    k = Knight(int(charecters[1]), int(charecters[2]))
+                    entities.add(k)
+                    enemies.add(k)
     
-#ef hero_death():
-   #death_image()
-def screen_saver():
+def death(hero, morphs, grave, enemies):
+    for morph in morphs:
+        morph.restart()    
+    hero.restart()
+    for g in grave:
+        g.restart()
+    for e in enemies:
+        e.restart()
+
+
+def screen_saver(done):
     pygame.init()
     started = False
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Obey Dark Lord")
     bg = Surface((width, height))     
     
-    background_image=pygame.image.load("screensaver.jpg").convert()
-    while not started:
+    background_image = pygame.image.load("screensaver.jpg").convert()
+    while not started and not done:
         for e in pygame.event.get():
             if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 started = True
+            if e.type == QUIT: #event handling
+                done = True            
             screen.blit(background_image, (0,0))
-        pygame.display.update()      
-
-def main():
-    done = False
-    background_image = pygame.image.load("background_1.png").convert()
+        pygame.display.update()    
+    return done
+def main(done):
+    background_image = pygame.image.load("bg.png").convert()
     
     for i in range(level_amount):
         level = []
@@ -99,6 +132,9 @@ def main():
         timer = pygame.time.Clock()
         left = right = up = 0
         morph_left = morph_right = morph_up = food = 0
+        total_level_width  = len(level[0])*gr_width
+        total_level_height = len(level)*gr_height
+        camera = Camera(camera_configure, total_level_width, total_level_height)         
         while (not hero.levelcompleted) and (not done):
             timer.tick(30)
             if hero.alive:
@@ -142,27 +178,34 @@ def main():
                 for enemy in enemies:
                     enemy.update(hero, grave)
                 hero.update(left, right, up, grave, enemies, ending)
-                entities.draw(screen)
+                camera.update(hero)
+                for e in entities:
+                    screen.blit(e.image, camera.apply(e))
                 pygame.display.update()
                 
                 if hero.rect.y > height:
                     hero.alive = False
-            else:
-                hero.restart()
-                for g in grave:
-                    g.restart()
-                for e in enemies:
-                    e.restart()
-                for morph in morphs:
-                    morph.restart()
-        if done:
-            pygame.quit()
+                if not hero.alive:
+                    death(hero, morphs, grave, enemies)
+            
+    return done
+
+def end(done):
+    background_image = pygame.image.load("end.png").convert()
+    while not done:
+        for e in pygame.event.get():
+            if e.type == QUIT:
+                done = True            
+            screen.blit(background_image, (0,0))
+        pygame.display.update()    
     pygame.quit()
 
 if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Obey Dark Lord")
-    bg = Surface((width, height))    
-    screen_saver()
-    main()        
+    bg = Surface((width, height))
+    done = False
+    done = screen_saver(done)
+    done = main(done)        
+    end(done)
